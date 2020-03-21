@@ -1,7 +1,9 @@
 package homeWork_3;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -9,6 +11,8 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import utilities.DriverFactory;
 import utilities.WaitSecond;
+
+import java.util.List;
 
 public class TestCases {
     private WebDriver driver;
@@ -82,15 +86,74 @@ public class TestCases {
         Select selectDep = new Select(driver.findElement(By.name("department")));
         selectDep.selectByVisibleText("Department of Engineering");
         WaitSecond.wait(2);
-        Select selectJob=new Select(driver.findElement(By.name("job_title")));
+        Select selectJob = new Select(driver.findElement(By.name("job_title")));
         selectJob.selectByVisibleText("SDET");
         WaitSecond.wait(2);
         driver.findElement(By.id("inlineCheckbox2")).click();
         WaitSecond.wait(3);
         driver.findElement(By.id("wooden_spoon")).click();
         WaitSecond.wait(4);
-        String actual= driver.findElement(By.tagName("p")).getText();
-        String expected="You've successfully completed registration!";
+        String actual = driver.findElement(By.tagName("p")).getText();
+        String expected = "You've successfully completed registration!";
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void Test6() {
+        driver.get("https://www.fakemail.net/");
+        WaitSecond.wait(2);
+        String email = driver.findElement(By.id("email")).getText();
+        driver.navigate().to("https://practice-cybertekschool.herokuapp.com/");
+        WaitSecond.wait(2);
+        driver.findElement(By.linkText("Sign Up For Mailing List")).click();
+        WaitSecond.wait(2);
+        driver.findElement(By.name("full_name")).sendKeys("Sadocan");
+        driver.findElement(By.name("email")).sendKeys(email);
+        WaitSecond.wait(2);
+        driver.findElement(By.name("wooden_spoon")).click();
+        WaitSecond.wait(3);
+        String actual= driver.findElement(By.tagName("h3")).getText();
+        String expected="Thank you for signing up. Click the button below to return to the home page.";
+        Assert.assertEquals(expected,actual);
+        driver.navigate().to("https://www.fakemail.net/");
+        WaitSecond.wait(3);
+        List<WebElement> mails= driver.findElements(By.id("schranka"));
+        mails.get(0).click();
+        WaitSecond.wait(3);
+        String actual1=driver.findElement(By.id("odesilatel")).getText();
+        String expected1= "do-not-reply@practice.cybertekschool.com";
+        Assert.assertEquals(expected1,actual1);
+        String actual2=driver.findElement(By.id("predmet")).getText();
+        String expected2= "Thanks for subscribing to practice.cybertekschool.com!";
+        Assert.assertEquals(expected2,actual2);
+    }
+
+    @Test
+    public void Test7() {
+        driver.findElement(By.linkText("File Upload")).click();
+        WaitSecond.wait(2);
+        driver.findElement(By.id("file-upload")).sendKeys("C:\\Users\\user\\Desktop\\linksForTesting.txt");
+        WaitSecond.wait(2);
+        driver.findElement(By.id("file-submit")).click();
+        WaitSecond.wait(2);
+        String actual = driver.findElement(By.tagName("h3")).getText();
+        String expected = "File Uploaded!";
+        String fileName = driver.findElement(By.id("uploaded-files")).getText();
+        System.out.println("fileName = " + fileName);
+        Assert.assertEquals(actual, expected);
+
+    }
+
+    @Test
+    public void Test8() {
+        driver.findElement(By.linkText("Autocomplete")).click();
+        WaitSecond.wait(2);
+        driver.findElement(By.id("myCountry")).sendKeys("United States of America");
+        WaitSecond.wait(2);
+        driver.findElement(By.xpath("//input[@class='btn btn-primary']")).click();
+        WaitSecond.wait(2);
+        String actual= driver.findElement(By.id("result")).getText();
+        String expected= "You selected: United States of America";
         Assert.assertEquals(expected,actual);
     }
 
@@ -99,9 +162,7 @@ public class TestCases {
         driver = DriverFactory.createDriver("chrome");
         driver.get("https://practice-cybertekschool.herokuapp.com/");
         driver.manage().window().maximize();
-        WaitSecond.wait(3);
-
-
+        WaitSecond.wait(2);
     }
 
     @AfterMethod
