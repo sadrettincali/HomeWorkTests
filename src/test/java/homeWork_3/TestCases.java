@@ -1,25 +1,28 @@
 package homeWork_3;
 
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.Select;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import utilities.DriverFactory;
 import utilities.WaitSecond;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class TestCases {
-    private WebDriver driver;
+    private RemoteWebDriver driver;
     private By registrationForm = By.linkText("Registration Form");
 
     @Test
     public void Test1() {
+        driver.executeScript("arguments[0].scrollIntoView(true)", driver.findElement(registrationForm));
+        WaitSecond.wait(3);
         driver.findElement(registrationForm).click();
         WaitSecond.wait(3);
         driver.findElement(By.cssSelector("*[name='birthday']")).sendKeys("wrong_dob");
@@ -70,26 +73,31 @@ public class TestCases {
         WaitSecond.wait(2);
         driver.findElement(By.name("firstname")).sendKeys("Sadocan");
         WaitSecond.wait(2);
+        driver.executeScript("window.scrollBy(0,250)");
         driver.findElement(By.name("lastname")).sendKeys("Madocan");
         WaitSecond.wait(2);
         driver.findElement(By.name("username")).sendKeys("sado12345");
         WaitSecond.wait(2);
+        driver.executeScript("window.scrollBy(0,250)");
         driver.findElement(By.name("email")).sendKeys("sadocan@email.com");
         WaitSecond.wait(2);
         driver.findElement(By.name("password")).sendKeys("sadomado12345");
         WaitSecond.wait(2);
         driver.findElement(By.name("phone")).sendKeys("571-710-7171");
+        driver.executeScript("window.scrollBy(0,250)");
         WaitSecond.wait(2);
         driver.findElement(By.cssSelector("*[value='male']")).click();
         WaitSecond.wait(2);
         driver.findElement(By.name("birthday")).sendKeys("05/06/1997");
         Select selectDep = new Select(driver.findElement(By.name("department")));
+        driver.executeScript("window.scrollBy(0,250)");
         selectDep.selectByVisibleText("Department of Engineering");
         WaitSecond.wait(2);
         Select selectJob = new Select(driver.findElement(By.name("job_title")));
         selectJob.selectByVisibleText("SDET");
         WaitSecond.wait(2);
         driver.findElement(By.id("inlineCheckbox2")).click();
+        driver.executeScript("window.scrollBy(0,250)");
         WaitSecond.wait(3);
         driver.findElement(By.id("wooden_spoon")).click();
         WaitSecond.wait(4);
@@ -156,13 +164,31 @@ public class TestCases {
         String expected= "You selected: United States of America";
         Assert.assertEquals(expected,actual);
     }
+    @DataProvider(name="testData")
+    public static Object [] testData(){
+        return new Object [] {"200","301","404","500"};
+    }
+
+
+    @Test(dataProvider = "testData")
+    public void TestRemaining(String num){
+        driver.findElement(By.linkText("Status Codes")).click();
+        WaitSecond.wait(2);
+        driver.findElement(By.linkText(num)).click();
+        WaitSecond.wait(2);
+        String expected="This page returned a "+num+" status code";
+        String actual=driver.findElement(By.tagName("p")).getText().trim();
+        Assert.assertEquals(actual.contains(expected),true);
+    }
+
 
     @BeforeMethod
     public void setup() {
-        driver = DriverFactory.createDriver("chrome");
+        driver = (RemoteWebDriver) DriverFactory.createDriver("chrome");
         driver.get("https://practice-cybertekschool.herokuapp.com/");
         driver.manage().window().maximize();
         WaitSecond.wait(2);
+
     }
 
     @AfterMethod
