@@ -84,20 +84,15 @@ public class TestCases {
     public void Test4(){
         driver.get("https://www.amazon.com/gp/site-directory");
         BrowserUtils.wait(3);
-        //driver.findElement(By.id("nav-hamburger-menu")).click();
         List <WebElement> mainPage= driver.findElements(By.tagName("h2"));
 
-      //  driver.findElement(By.xpath("//div[@class='nav-sprite mhenu-close-icon']")).click();
 
        driver.findElement(By.id("searchDropdownBox")).click();
         List<WebElement> options=driver.findElements(By.tagName("option"));
         int l1=mainPage.size();
         int l2=options.size();
-       if (l1==l2){
-           System.out.println("Test Passed");
-       }else {
-           System.out.println("Test Failed");
-       }
+
+        Assert.assertEquals(l1== l2, false);
 
     }
     @Test
