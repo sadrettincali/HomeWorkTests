@@ -129,12 +129,6 @@ public class TestCases {
 
     }
     /*
-    CART1.go to https://amazon.com
-2.search for "wooden spoon"
-3.click search
-4.rememberthe nameand the price of a random result
-5.click on that random result
-6.verify default quantityof items is 1
 7.verify that the name and the price is the same as the one from step 5
 8.verify button"Add to Cart" is visible
      */
@@ -145,7 +139,13 @@ public class TestCases {
         WaitSecond.wait(2);
         driver.findElement(By.id("twotabsearchtextbox")).sendKeys("wooden spoon");
         driver.findElement(By.xpath("(//input[@class='nav-input'])[1]")).click();
-
+        WaitSecond.wait(5);
+        List<WebElement> spoons= driver.findElements(By.cssSelector("div[class='a-section aok-relative s-image-square-aspect']"));
+        Random r= new Random();
+        spoons.get(r.nextInt(spoons.size())).click();
+        String cnnt=driver.findElement(By.xpath("(//span[@class='a-dropdown-prompt'])[1]")).getText();
+        Assert.assertEquals(cnnt.contains("1"), true);
+        Assert.assertEquals(driver.findElement(By.id("add-to-cart-button")).isEnabled(),true);
 
     }
 
