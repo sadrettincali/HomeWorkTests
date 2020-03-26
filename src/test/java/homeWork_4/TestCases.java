@@ -81,28 +81,29 @@ public class TestCases {
     }
 
     @Test
-    public void Test4(){
+    public void Test4() {
         driver.get("https://www.amazon.com/gp/site-directory");
         BrowserUtils.wait(3);
-        List <WebElement> mainPage= driver.findElements(By.tagName("h2"));
+        List<WebElement> mainPage = driver.findElements(By.tagName("h2"));
 
 
-       driver.findElement(By.id("searchDropdownBox")).click();
-        List<WebElement> options=driver.findElements(By.tagName("option"));
-        int l1=mainPage.size();
-        int l2=options.size();
+        driver.findElement(By.id("searchDropdownBox")).click();
+        List<WebElement> options = driver.findElements(By.tagName("option"));
+        int l1 = mainPage.size();
+        int l2 = options.size();
 
-        Assert.assertEquals(l1== l2, false);
+        Assert.assertEquals(l1 == l2, false);
 
     }
-    @Test
-    public void Test5(){
-       driver.get("https://www.w3schools.com/");
-       BrowserUtils.wait(3);
-       List<WebElement> allLinks= driver.findElements(By.tagName("a"));
 
-        for (int i = 12; i <allLinks.size() ; i++) {
-            if (allLinks.get(i).isDisplayed() && !(allLinks.get(i).getText().isEmpty())){
+    @Test
+    public void Test5() {
+        driver.get("https://www.w3schools.com/");
+        BrowserUtils.wait(3);
+        List<WebElement> allLinks = driver.findElements(By.tagName("a"));
+
+        for (int i = 12; i < allLinks.size(); i++) {
+            if (allLinks.get(i).isDisplayed() && !(allLinks.get(i).getText().isEmpty())) {
                 System.out.println(allLinks.get(i).getText());
                 System.out.println(allLinks.get(i).getAttribute("href"));
             }
@@ -111,36 +112,39 @@ public class TestCases {
     }
 
     @Test
-    public void Test6(){
+    public void Test6() {
         driver.get("https://www.selenium.dev/documentation/en/");
         BrowserUtils.wait(3);
-        List<WebElement> allLinks= driver.findElements(By.tagName("a"));
-        String title= driver.getTitle();
-        boolean result= true;
-        for (WebElement each : allLinks){
+        List<WebElement> allLinks = driver.findElements(By.tagName("a"));
+        String title = driver.getTitle();
+        boolean result = true;
+        for (WebElement each : allLinks) {
             each.click();
             BrowserUtils.wait(2);
-            if (driver.getTitle().equals(title)){
-                result=false;
+            if (driver.getTitle().equals(title)) {
+                result = false;
                 break;
             }
         }
 
     }
+    /*
+    CART1.go to https://amazon.com
+2.search for "wooden spoon"
+3.click search
+4.rememberthe nameand the price of a random result
+5.click on that random result
+6.verify default quantityof items is 1
+7.verify that the name and the price is the same as the one from step 5
+8.verify button"Add to Cart" is visible
+     */
 
     @Test
-    public void Test7(){
+    public void Test7() {
         driver.get("https://amazon.com");
         WaitSecond.wait(2);
         driver.findElement(By.id("twotabsearchtextbox")).sendKeys("wooden spoon");
-        WaitSecond.wait(1);
-        driver.findElement(By.xpath("(//input[@type='submit'])[1]")).click();
-        WaitSecond.wait(2);
-
-
-
-
-
+        driver.findElement(By.xpath("(//input[@class='nav-input'])[1]")).click();
 
 
     }
