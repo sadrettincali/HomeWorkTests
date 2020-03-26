@@ -124,7 +124,7 @@ public class TestCases {
         String expected="Thank you for signing up. Click the button below to return to the home page.";
         Assert.assertEquals(expected,actual);
         driver.navigate().to("https://www.fakemail.net/");
-        WaitSecond.wait(3);
+        WaitSecond.wait(5);
         List<WebElement> mails= driver.findElements(By.id("schranka"));
         mails.get(0).click();
         WaitSecond.wait(3);
@@ -166,6 +166,7 @@ public class TestCases {
     }
     @DataProvider(name="testData")
     public static Object [] testData(){
+
         return new Object [] {"200","301","404","500"};
     }
 
@@ -177,7 +178,7 @@ public class TestCases {
         driver.findElement(By.linkText(num)).click();
         WaitSecond.wait(2);
         String expected="This page returned a "+num+" status code";
-        String actual=driver.findElement(By.tagName("p")).getText().trim();
+        String actual=driver.findElement(By.tagName("p")).getText();
         Assert.assertEquals(actual.contains(expected),true);
     }
 

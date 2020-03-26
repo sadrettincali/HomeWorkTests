@@ -8,6 +8,7 @@ import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
+import utilities.BrowserUtils;
 import utilities.DriverFactory;
 import utilities.WaitSecond;
 
@@ -23,11 +24,12 @@ public class TestCases {
         Random r = new Random();
 
         List<WebElement> labels = driver.findElements(By.tagName("label"));
+        List<WebElement> checkboxes = driver.findElements(By.xpath("//input[@type='checkbox']"));
         int fridayCount = 0;
 
         do {
             int index = r.nextInt(7);
-            if (labels.get(index).isEnabled()) {
+            if (checkboxes.get(index).isEnabled()) {
                 labels.get(index).click();
                 System.out.println(labels.get(index).getText());
                 labels.get(index).click();
@@ -74,13 +76,79 @@ public class TestCases {
         if (sLists.equals(sLists2)) {
             result = "false";
         }
-        System.out.println("sLists = " + sLists);
-        System.out.println("sLists2 = " + sLists2);
-        System.out.println("result = " + result);
         Assert.assertEquals("true", result);
 
     }
 
+    @Test
+    public void Test4(){
+        driver.get("https://www.amazon.com/gp/site-directory");
+        BrowserUtils.wait(3);
+        //driver.findElement(By.id("nav-hamburger-menu")).click();
+        List <WebElement> mainPage= driver.findElements(By.tagName("h2"));
+
+      //  driver.findElement(By.xpath("//div[@class='nav-sprite mhenu-close-icon']")).click();
+
+       driver.findElement(By.id("searchDropdownBox")).click();
+        List<WebElement> options=driver.findElements(By.tagName("option"));
+        int l1=mainPage.size();
+        int l2=options.size();
+       if (l1==l2){
+           System.out.println("Test Passed");
+       }else {
+           System.out.println("Test Failed");
+       }
+
+    }
+    @Test
+    public void Test5(){
+       driver.get("https://www.w3schools.com/");
+       BrowserUtils.wait(3);
+       List<WebElement> allLinks= driver.findElements(By.tagName("a"));
+
+        for (int i = 12; i <allLinks.size() ; i++) {
+            if (allLinks.get(i).isDisplayed() && !(allLinks.get(i).getText().isEmpty())){
+                System.out.println(allLinks.get(i).getText());
+                System.out.println(allLinks.get(i).getAttribute("href"));
+            }
+
+        }
+    }
+
+    @Test
+    public void Test6(){
+        driver.get("https://www.selenium.dev/documentation/en/");
+        BrowserUtils.wait(3);
+        List<WebElement> allLinks= driver.findElements(By.tagName("a"));
+        String title= driver.getTitle();
+        boolean result= true;
+        for (WebElement each : allLinks){
+            each.click();
+            BrowserUtils.wait(2);
+            if (driver.getTitle().equals(title)){
+                result=false;
+                break;
+            }
+        }
+
+    }
+
+    @Test
+    public void Test7(){
+        driver.get("https://amazon.com");
+        WaitSecond.wait(2);
+        driver.findElement(By.id("twotabsearchtextbox")).sendKeys("wooden spoon");
+        WaitSecond.wait(1);
+        driver.findElement(By.xpath("(//input[@type='submit'])[1]")).click();
+        WaitSecond.wait(2);
+
+
+
+
+
+
+
+    }
 
     @BeforeMethod
     public void setup() {
