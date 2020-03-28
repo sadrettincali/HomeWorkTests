@@ -46,13 +46,19 @@ public class TestCases {
     public void Test2() {
         driver.get("http://practice.cybertekschool.com/dropdown");
         WaitSecond.wait(2);
-        String year = driver.findElement(By.id("year")).getText();
-        String month = driver.findElement(By.id("month")).getText();
-        String day = driver.findElement(By.id("day")).getText();
 
-        System.out.println("" + year + month + day);
+        Select select1=new Select(driver.findElement(By.id("year")));
+        Select select2=new Select(driver.findElement(By.id("month")));
+        Select select3=new Select(driver.findElement(By.id("day")));
+
+        String year =select1.getFirstSelectedOption().getText();
+        String month =select2.getFirstSelectedOption().getText();
+        String day =select3.getFirstSelectedOption().getText();
+
+
+        System.out.println("" + day + month + year);
         Assert.assertEquals(year, "2020");
-        Assert.assertEquals(day, "24");
+        Assert.assertEquals(day, "27");
         Assert.assertEquals(month, "March");
     }
 
@@ -128,10 +134,6 @@ public class TestCases {
         }
 
     }
-    /*
-7.verify that the name and the price is the same as the one from step 5
-8.verify button"Add to Cart" is visible
-     */
 
     @Test
     public void Test7() {
@@ -142,10 +144,29 @@ public class TestCases {
         WaitSecond.wait(5);
         List<WebElement> spoons= driver.findElements(By.cssSelector("div[class='a-section aok-relative s-image-square-aspect']"));
         Random r= new Random();
-        spoons.get(r.nextInt(spoons.size())).click();
+        WebElement element=spoons.get(r.nextInt(spoons.size()));
+        element.click();
         String cnnt=driver.findElement(By.xpath("(//span[@class='a-dropdown-prompt'])[1]")).getText();
         Assert.assertEquals(cnnt.contains("1"), true);
         Assert.assertEquals(driver.findElement(By.id("add-to-cart-button")).isEnabled(),true);
+
+    }
+    /*
+    4.remember name first result that has prime label
+    5.select Prime check box on the left
+    6.verify that name first result that has prime label is same as step 4
+    7.check the last check box under Brand on the left
+    8.verify that name first result that has prime label is different
+     */
+    @Test
+    public void Test8(){
+        driver.get("https://amazon.com");
+        WaitSecond.wait(2);
+        driver.findElement(By.id("twotabsearchtextbox")).sendKeys("wooden spoon");
+        driver.findElement(By.xpath("(//input[@class='nav-input'])[1]")).click();
+        WaitSecond.wait(5);
+        driver.findElement(By.xpath("(//span[@class='sb_3XafbQtX sb_25yic0YU sb_CyFsQ0hU'])[1]")).click();
+        WaitSecond.wait(3);
 
     }
 
